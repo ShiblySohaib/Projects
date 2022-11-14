@@ -205,7 +205,6 @@ int main()
             }
             if(found==0)
 			{
-				printf("%d",found);
 				printf("\n\n");
 				printf("                                                  ========================\n");
 				printf("                                                      Contact not found\n");
