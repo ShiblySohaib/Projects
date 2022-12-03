@@ -152,7 +152,6 @@ public class ManageFood{
 		AddFoodForMenu food = new AddFoodForMenu();
 		food = foodlist.get(selectfood-1);
 		foodprice = food.getPrice() * quantity;
-
 		Totalpayment =Totalpayment + foodprice;
 		customer.setTotalpayment(Totalpayment);
 		System.out.println();
@@ -165,30 +164,11 @@ public class ManageFood{
 			continue;
 		}
 		System.out.println("Order complete...");
-		System.out.println("Total Payment is: "+ Totalpayment);
+		System.out.println("Total Payment is: "+ Totalpayment+" BDT");
 		break;
 		}
 	}
 
-
-	public void PrintOrder() {
-		System.out.println();
-		for ( i = 0; i < 30; i++)
-		{
-			System.out.print("=");
-		}
-
-		System.out.print(" ORDER INFORMATION ");
-
-		for ( i = 0; i < 30; i++)
-		{
-			System.out.print("=");
-		}
-		System.out.println();
-		for (int i = 0; i < order.size(); i++) {
-			order.get(i).print();
-		}
-	}
 
 	public void Search() {
 		System.out.println();
@@ -207,19 +187,19 @@ public class ManageFood{
 
 		System.out.println();
 		Scanner input=new Scanner(System.in);
-		String tablecode;
+		int tablecode;
 		int i, flag=0;
-		System.out.print("Enter Table Code(Ex: Table-1) to Know Total Bill: ");
-		tablecode = input.nextLine();
+		System.out.print("Enter Table Code to Know Total Bill: ");
+		tablecode = input.nextInt();
 
 		for ( i = 0; i < order.size(); i++) {
-			if (order.get(i).tablecode.equals(tablecode)) {
+			if (order.get(i).tablecode==tablecode) {
 				order.get(i).print();
 				flag++;
 			}
 		}
 		if (flag==0) {
-			System.out.println("No Table Available."+tablecode);
+			System.out.println("No orders for "+tablecode);
 		}
 	}
 }

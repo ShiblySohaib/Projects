@@ -94,9 +94,8 @@ public class Admin extends Password {
             System.out.print("=");
         }
         System.out.println();
-        System.out.println("1. Order Food");
-        System.out.println("2. Order Information");
-        System.out.println("3. Payment Information");
+        System.out.println("1. Add order");
+        System.out.println("2. Payment Information");
         System.out.println("0. Return Main Menu");
 
     }

@@ -80,9 +80,6 @@ public class Main{
                                     managefoodobj.TakeOrder();
                                     break;
                                 case 2:
-                                    managefoodobj.PrintOrder();
-                                    break;
-                                case 3:
                                     managefoodobj.Search();
                                     break;
                                 case 0:

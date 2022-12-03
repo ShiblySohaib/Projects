@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 public class AddFoodForMenu {
-    private int serial;
     private String name;
     private float price;
     Scanner input =new Scanner(System.in);

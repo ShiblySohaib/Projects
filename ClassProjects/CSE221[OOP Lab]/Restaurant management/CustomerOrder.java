@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class CustomerOrder {
 
-        public String tablecode;
+        public int tablecode;
         public String name;
         public String phone;
         int i;
@@ -26,8 +26,8 @@ public class CustomerOrder {
         }
         Scanner input = new Scanner(System.in);
         System.out.println();
-        System.out.print("Choice Table & Enter Table Code(Ex: Table-1): ");
-        tablecode = input.nextLine();
+        System.out.print("Choose Table & Enter Table Code: ");
+        tablecode = input.nextInt();
         System.out.print("Enter Your Name: ");
         name= input.nextLine();
         System.out.print("Enter Your Phone Number: ");
@@ -39,7 +39,7 @@ public class CustomerOrder {
             System.out.println("Customer Name: "+this.name);
             System.out.println("Customer Phone Number: "+this.phone);
             System.out.println("Table Code: "+this.tablecode);
-            System.out.println("Total Payment: "+this.Totalpayment);
+            System.out.println("Total Payment: "+this.Totalpayment+" BDT");
             System.out.println();
         }
 
