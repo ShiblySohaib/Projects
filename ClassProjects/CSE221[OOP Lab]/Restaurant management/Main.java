@@ -1,39 +1,38 @@
 import java.util.Scanner;
 
-public class Main{
+public class Main {
 
     public static void main(String[] args) {
         int select1, select2, select3, login = 1;
         Scanner input = new Scanner(System.in);
         Admin adminobj = new Admin();
         ManageFood managefoodobj = new ManageFood();
-        AddFoodForMenu food=new AddFoodForMenu();
+        AddFoodForMenu food = new AddFoodForMenu();
 
         /////////////////       dummy data      ///////////////
 
-        food.CreateMenu("Chicken",150);
+        food.CreateMenu("Chicken", 150);
         managefoodobj.foodlist.add(food);
-        food=new AddFoodForMenu();
-        food.CreateMenu("Pizza",200);
+        food = new AddFoodForMenu();
+        food.CreateMenu("Pizza", 200);
         managefoodobj.foodlist.add(food);
-        food=new AddFoodForMenu();
-        food.CreateMenu("Pasta",150);
+        food = new AddFoodForMenu();
+        food.CreateMenu("Pasta", 150);
         managefoodobj.foodlist.add(food);
-        food=new AddFoodForMenu();
-        food.CreateMenu("Sushi",300);
+        food = new AddFoodForMenu();
+        food.CreateMenu("Sushi", 300);
         managefoodobj.foodlist.add(food);
-        food=new AddFoodForMenu();
-        food.CreateMenu("Munch",100);
+        food = new AddFoodForMenu();
+        food.CreateMenu("Munch", 100);
         managefoodobj.foodlist.add(food);
 
 
         ///////////////////////////////////////////////////////
         for (; ; ) {
-            if(login==1) {
-                login=0;
+            if (login == 1) {
+                login = 0;
                 adminobj.Login();
             }
-
             do {
                 adminobj.Mainmenu();
                 System.out.print("Please Enter Your Choice: ");
@@ -95,7 +94,7 @@ public class Main{
                         String pass1 = input.next();
                         adminobj.setPassword(pass1);
                         System.out.println("Password changed successfully");
-                        login=1;
+                        login = 1;
                         break;
                     case 4:
                         return;
@@ -103,7 +102,7 @@ public class Main{
                     default:
                         break;
                 }
-                if(login==1)break;
+                if (login == 1) break;
             } while (select1 != 0);
         }
     }
