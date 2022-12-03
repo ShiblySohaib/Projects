@@ -30,7 +30,8 @@ public class ManageFood{
 		for (int i = 0; i < n; i++) {
 			AddFoodForMenu food = new AddFoodForMenu();
 			food. CreateMenu();
-			foodlist.add(food); 
+			foodlist.add(food);
+			System.out.println("Food added successfully...");
 		}
 	}
 
@@ -97,7 +98,7 @@ public class ManageFood{
 		if(foodsl<=foodlist.size()){
 			foodlist.get(foodsl-1).setName();
 			foodlist.get(foodsl-1).setPrice();
-			System.out.println("Edited successfully");
+			System.out.println("Edited successfully...");
 		}
 		else{
 			System.out.println("Invalid Serial number. Try again.");

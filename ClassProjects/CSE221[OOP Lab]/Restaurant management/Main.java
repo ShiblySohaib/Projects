@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -36,14 +37,23 @@ public class Main {
             do {
                 adminobj.Mainmenu();
                 System.out.print("Please Enter Your Choice: ");
-                select1 = input.nextInt();
-
+                try {
+                    select1 = input.nextInt();
+                } catch (InputMismatchException e) {
+                    input.nextLine();
+                    break;
+                }
                 switch (select1) {
                     case 1:
                         do {
                             adminobj.ManageFoodMenu();
                             System.out.print("Please Enter Your Choice: ");
-                            select2 = input.nextInt();
+                            try {
+                                select2 = input.nextInt();
+                            } catch (InputMismatchException e) {
+                                input.nextLine();
+                                break;
+                            }
                             switch (select2) {
                                 case 1:
                                     managefoodobj.Print();
@@ -72,7 +82,12 @@ public class Main {
                         do {
                             adminobj.MenuOrder();
                             System.out.print("Please Enter Your Choice: ");
-                            select3 = input.nextInt();
+                            try {
+                                select3 = input.nextInt();
+                            } catch (InputMismatchException e) {
+                                input.nextLine();
+                                break;
+                            }
                             switch (select3) {
                                 case 1:
                                     adminobj.AllSeats();
@@ -90,10 +105,7 @@ public class Main {
                         } while (select3 != 0);
                         break;
                     case 3:
-                        System.out.println("Enter new password: ");
-                        String pass1 = input.next();
-                        adminobj.setPassword(pass1);
-                        System.out.println("Password changed successfully");
+                        adminobj.ChangePass();
                         login = 1;
                         break;
                     case 4:

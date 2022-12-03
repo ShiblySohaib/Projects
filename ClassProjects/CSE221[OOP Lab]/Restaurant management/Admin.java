@@ -95,7 +95,7 @@ public class Admin extends Password {
             System.out.print("-");
         }
         System.out.println();
-        System.out.println("\t\t\t\t\t\t\t\tALL SEATS ");
+        System.out.println("\t\t\t\t\t\t\t\t\t Tables ");
 
         System.out.println("\t\t\t\t\t   Table-01\t\tTable-02\t\tTable-03");
         System.out.println("\t\t\t\t\t   Table-04\t\tTable-05\t\tTable-06");
@@ -104,5 +104,14 @@ public class Admin extends Password {
         for (i = 0; i < 81; i++) {
             System.out.print("-");
         }
+    }
+
+    public void ChangePass(){
+        System.out.println();
+        System.out.println("=============================== Change Password ===============================\n");
+        System.out.println("Enter new password: ");
+        String pass1 = input.next();
+        setPassword(pass1);
+        System.out.println("Password changed successfully...");
     }
 }

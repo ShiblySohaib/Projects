@@ -18,7 +18,7 @@ public class CustomerOrder {
             System.out.print("=");
         }
 
-        System.out.print(" ORDER FOOD ");
+        System.out.print(" ADD ORDER ");
 
         for (i = 0; i < 35; i++) {
             System.out.print("=");
@@ -27,6 +27,7 @@ public class CustomerOrder {
         System.out.println();
         System.out.print("Choose Table & Enter Table Code: ");
         tablecode = input.nextInt();
+        input.nextLine();
         System.out.print("Enter Your Name: ");
         name = input.nextLine();
         System.out.print("Enter Your Phone Number: ");
