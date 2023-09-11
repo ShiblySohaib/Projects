@@ -2,16 +2,16 @@
 .STACK 100H
 .DATA      
 
-;initial values
-A1 DB '-'
-A2 DB '-'
-A3 DB '-'
-B1 DB '-'
-B2 DB '-'
-B3 DB '-'
-C1 DB '-'
-C2 DB '-'
-C3 DB '-'   
+;initial keymap
+A1 DB ?
+A2 DB ?
+A3 DB ?
+B1 DB ?
+B2 DB ?
+B3 DB ?
+C1 DB ?
+C2 DB ?
+C3 DB ?   
 
 ;printing 
 SPACES DB '          $'
@@ -36,9 +36,13 @@ OVERWRITE DB 13,10,10,'Coordinate is not empty. Try again.$'
 GAME_OVER_MSG DB 13,10,10,'Game Over. Nobody wins.$' 
 OP2 DB 13,10,'Enter any other key to play again.$'
 
+;win message
+WIN_P1 DB 13,10,10,'<PLAYER 1> wins this match.$'
+WIN_P2 DB 13,10,10,'<PLAYER 2> wins this match.$'
+
 
 ;LOGIC    
-MOVE DB 'o'     ;move sign
+SIGN DB 'o'     ;SIGN sign
 FILLED DB 0     ;how many positions filled
 
 .CODE
@@ -228,68 +232,76 @@ FILLED DB 0     ;how many positions filled
      CMP DL,'0'     ;jump to label according to input
      JE EXIT
      CMP DL,'1'
-     JE CN1
+     JE KEY_A1
      CMP DL,'2'
-     JE CN2        
+     JE KEY_A2        
      CMP DL,'3'
-     JE CN3
+     JE KEY_A3
      CMP DL,'4'
-     JE CN4
+     JE KEY_B1
      CMP DL,'5'
-     JE CN5
+     JE KEY_B2
      CMP DL,'6'
-     JE CN6
+     JE KEY_B3
      CMP DL,'7'
-     JE CN7
+     JE KEY_C1
      CMP DL,'8'
-     JE CN8
+     JE KEY_C2
      CMP DL,'9'
-     JE CN9
+     JE KEY_C3
      
      JE INVALID_MSG ;in case of no valid input
      
 
-     CN1: 
+     KEY_A1: 
      CMP A1,'-'
      JNE OVERWRITE_MSG
      MOV A1,BL  
-     JMP SWITCH
-     CN2:
+     JMP SWITCH 
+     
+     KEY_A2:
      CMP A2,'-'
      JNE OVERWRITE_MSG 
      MOV A2,BL  
-     JMP SWITCH
-     CN3:            
+     JMP SWITCH 
+     
+     KEY_A3:            
      CMP A3,'-'
      JNE OVERWRITE_MSG
      MOV A3,BL  
      JMP SWITCH
-     CN4:            
+     
+     KEY_B1:            
      CMP B1,'-'
      JNE OVERWRITE_MSG
      MOV B1,BL  
      JMP SWITCH
-     CN5:            
+     
+     KEY_B2:            
      CMP B2,'-'
      JNE OVERWRITE_MSG
      MOV B2,BL  
      JMP SWITCH
-     CN6:            
+     
+     KEY_B3:            
      CMP B3,'-'
      JNE OVERWRITE_MSG
      MOV B3,BL  
-     JMP SWITCH 
-     CN7:            
+     JMP SWITCH
+      
+     KEY_C1:            
      CMP C1,'-'
      JNE OVERWRITE_MSG
      MOV C1,BL  
-     JMP SWITCH 
-     CN8:            
+     JMP SWITCH
+      
+     KEY_C2:            
      CMP C2,'-'
      JNE OVERWRITE_MSG
      MOV C2,BL  
      JMP SWITCH 
-     CN9:            
+     
+     KEY_C3:            
      CMP C3,'-'
      JNE OVERWRITE_MSG
      MOV C3,BL  
@@ -310,7 +322,7 @@ FILLED DB 0     ;how many positions filled
      
      SWITCH:  
      INC FILLED
-     XCHG BL,MOVE  
+     XCHG BL,SIGN  
      JMP GAME_SCR     
      
      GAME_OVER:
