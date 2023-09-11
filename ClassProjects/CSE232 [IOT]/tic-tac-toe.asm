@@ -12,7 +12,6 @@ B3 DB ?
 C1 DB ?
 C2 DB ?
 C3 DB ?
-
    
 
 ;printing 
@@ -38,27 +37,29 @@ OVERWRITE DB 13,10,10,'Coordinate is not empty. Try again.$'
 GAME_OVER_MSG DB 13,10,10,'Game Over. Nobody wins.$' 
 OP2 DB 13,10,'Enter any other key to play again.$'
 
-;win message
-WIN_P1 DB 13,10,10,'<PLAYER 1> wins this match.$'
-WIN_P2 DB 13,10,10,'<PLAYER 2> wins this match.$'
+;win & draw message
+WIN_P1 DB 13,10,10,'Game over. (Player 1) wins.$'
+WIN_P2 DB 13,10,10,'Game over. (Player 2) wins.$' 
+DRAWMSG DB 13,10,10,"Game over. It's a draw.$"
 
 
 ;LOGIC    
-SIGN DB 'o'     ;SIGN sign
-FILLED DB 0     ;how many positions filled
+SIGN DB 'o'     ;move sign
+FILLED DB 0     ;number of positions filled
 
 .CODE
  MAIN PROC
      MOV AX,@DATA
      MOV DS,AX  
      
-     ;WELCOME MESSAGE
+     ;-----------------------------WELCOME MESSAGE-----------------------------
      MOV AH,9   
      LEA DX,NEWLINE
      INT 21H
      LEA DX,WELCOME
      INT 21H
      
+     ;-----------------------------Initialize all values-----------------------------
      INITIALIZE:
      MOV A1,'-'
      MOV A2,'-'
@@ -68,17 +69,15 @@ FILLED DB 0     ;how many positions filled
      MOV B3,'-'
      MOV C1,'-'
      MOV C2,'-'
-     MOV C3,'-' 
+     MOV C3,'-'  
+     MOV SIGN, 'o'
+     MOV BL,'x'
+     MOV FILLED,0
      
      ;NOTE:
      ;BL FOR alternating X,0
      ;BH,CH,CL FOR WIN CONDITION  
-     
-     MOV BL,'x'
-     
-     MOV FILLED,0
-      
-    
+
      ;;;;;;;;;;;      
       
      ; 0 | 0 | 0
@@ -89,7 +88,7 @@ FILLED DB 0     ;how many positions filled
      ;;;;;;;;;;;
      
      
-     ;PRINTING THE GAME SCREEN
+     ;-----------------------------Printing the game screen-----------------------------
      
      GAME_SCR:   
      MOV AH,9    
@@ -194,11 +193,11 @@ FILLED DB 0     ;how many positions filled
      INT 21H
      LEA DX,NEWLINE
      INT 21H          
-     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
+ 
      
      
-     ;
-     ;Check win conditions here. 
+
+     ;-----------------------------Check all win conditions----------------------------- 
      MOV CX,8
      
      BIG_LOOP:
@@ -285,15 +284,14 @@ FILLED DB 0     ;how many positions filled
      MOV CH,C1;
      JMP WIN
      
+
+     WIN:      
      
-     
-     WIN: 
-     
-     
-     ;ITS PLAYER 1 TURN IF BL=X; CHECK IF PLAYER 2 WON
+     ;player1 = x, player2 = o
      CMP BL,'x'
      JE PLAYER2_WON
      
+     ;-----------------------------Check if player1 won-----------------------------
      PLAYER1_WON:
      
         CMP BH,CL
@@ -305,13 +303,17 @@ FILLED DB 0     ;how many positions filled
         CMP BH,'-'
         JE CHECK_FULL
         
-        MOV AH,9    
+        MOV AH,9
+        LEA DX,NEWLINES
+        INT 21H   
         LEA DX,WIN_P1
         INT 21H
         JMP GAME_OVER
+
         
      JMP CHECK_FULL
      
+     ;-----------------------------Check if player2 won-----------------------------
      PLAYER2_WON:  
      
         CMP BH,CL
@@ -323,24 +325,24 @@ FILLED DB 0     ;how many positions filled
         CMP BH,'-'
         JE CHECK_FULL
         
-        MOV AH,9    
+        MOV AH,9
+        LEA DX,NEWLINES
+        INT 21H   
         LEA DX,WIN_P2
         INT 21H
         JMP GAME_OVER    
-     ;
      
-     ;
+     
+     ;-----------------------------Check if board is full-----------------------------
      CHECK_FULL:
-     ;CHECK IF ITS FULL
-       MOV BH,FILLED
-       CMP BH,9
-       JE GAME_OVER
+     CMP FILLED,9
+     JE DRAW
      
      POP CX  
      LOOP BIG_LOOP;
-     
-     ;GAME STARTS HERE
-                  
+                          
+                          
+     ;-----------------------------Game starts here-----------------------------
      START_GAME:            
      LEA DX, NEWLINES
      MOV AH,9
@@ -361,8 +363,7 @@ FILLED DB 0     ;how many positions filled
               
               
               
-     ;INPUT STARTS HERE
-          
+     ;-----------------------------Input starts here-----------------------------          
      Input:         
      MOV AH,1
      INT 21H
@@ -391,7 +392,8 @@ FILLED DB 0     ;how many positions filled
      
      JE INVALID_MSG ;in case of no valid input
      
-
+     
+     ;-----------------------------Assign input to board-----------------------------
      KEY_A1: 
      CMP A1,'-'
      JNE OVERWRITE_MSG
@@ -446,28 +448,37 @@ FILLED DB 0     ;how many positions filled
      MOV C3,BL  
      JMP SWITCH  
      
-     
+     ;-----------------------------Message for invalid input-----------------------------
      INVALID_MSG:
      MOV AH,9
      LEA DX,INV_INPUT
      INT 21H
      JMP GAME_SCR        
-
+     
+     ;-----------------------------Message for overwriting attempt-----------------------------
      OVERWRITE_MSG:
      MOV AH,9
      LEA DX,OVERWRITE
      INT 21H
      JMP GAME_SCR
      
+     ;-----------------------------Switch player-----------------------------
      SWITCH:  
      INC FILLED
      XCHG BL,SIGN  
-     JMP GAME_SCR     
+     JMP GAME_SCR 
      
-     GAME_OVER:
+     ;-----------------------------Draw message-----------------------------
+     DRAW:
      MOV AH,9
      LEA DX,NEWLINES
-     INT 21H 
+     INT 21H   
+     LEA DX,DRAWMSG
+     INT 21H
+     JMP GAME_OVER    
+     
+     ;-----------------------------Menu after game over-----------------------------
+     GAME_OVER:
      LEA DX,NEWLINE
      INT 21H
      LEA DX,EXIT_INSTRUCTION
@@ -477,6 +488,7 @@ FILLED DB 0     ;how many positions filled
      LEA DX,NEWLINE
      INT 21H
      
+     ;-----------------------------Game over menu input-----------------------------
      MOV AH,1
      INT 21H
      CMP AL,'0'  
