@@ -11,7 +11,9 @@ B2 DB ?
 B3 DB ?
 C1 DB ?
 C2 DB ?
-C3 DB ?   
+C3 DB ?
+
+   
 
 ;printing 
 SPACES DB '          $'
@@ -196,26 +198,59 @@ FILLED DB 0     ;how many positions filled
      
      
      ;
-     ;Check win conditions here.
+     ;Check win conditions here. 
+     MOV CX,8
+     
+     BIG_LOOP:
+     
+     CMP CX,1
+     JE ROW_1
+     
+     CMP CX,2
+     JE ROW_2
+     
+     CMP CX,3
+     JE ROW_3
+     
+     CMP CX,4
+     JE COL_1
+     
+     CMP CX,5
+     JE COL_2
+     
+     CMP CX,6
+     JE COL_3
+     
+     CMP CX,7
+     JE DIAG_1
+     
+     CMP CX,8
+     JE DIAG_2
+     
+     
      ROW_1:
+     PUSH CX
      MOV BH,A1;
      MOV CL,A2;
      MOV CH,A3;
      JMP WIN
      
      ROW_2:
+     PUSH CX
      MOV BH,B1;
      MOV CL,B2;
      MOV CH,B3;
      JMP WIN
      
      ROW_3:
+     PUSH CX
      MOV BH,C1;
      MOV CL,C2;
      MOV CH,C3;
      JMP WIN
      
      COL_1:
+     PUSH CX
      MOV BH,A1;
      MOV CL,B1;
      MOV CH,C1;
@@ -223,24 +258,28 @@ FILLED DB 0     ;how many positions filled
      
      
      COL_2:
+     PUSH CX
      MOV BH,A2;
      MOV CL,B2;
      MOV CH,C2;
      JMP WIN
      
      COL_3:
+     PUSH CX
      MOV BH,A3;
      MOV CL,B3;
      MOV CH,C3;
      JMP WIN
      
      DIAG_1:
+     PUSH CX
      MOV BH,A1;
      MOV CL,B2;
      MOV CH,C3;
      JMP WIN
      
      DIAG_2:
+     PUSH CX
      MOV BH,A3;
      MOV CL,B2;
      MOV CH,C1;
@@ -249,13 +288,7 @@ FILLED DB 0     ;how many positions filled
      
      
      WIN: 
-     ; CHECK IF THERE'S ANY HYPHEN
-     CMP BH,'-'
-     JE START_GAME
-     CMP CL,'-'
-     JE START_GAME
-     CMP CH,'-'
-     JE START_GAME
+     
      
      ;ITS PLAYER 1 TURN IF BL=X; CHECK IF PLAYER 2 WON
      CMP BL,'x'
@@ -267,6 +300,10 @@ FILLED DB 0     ;how many positions filled
         JNE CHECK_FULL
         CMP CL,CH
         JNE CHECK_FULL
+        
+        ; CHECK IF THERE'S ANY HYPHEN
+        CMP BH,'-'
+        JE CHECK_FULL
         
         MOV AH,9    
         LEA DX,WIN_P1
@@ -280,7 +317,11 @@ FILLED DB 0     ;how many positions filled
         CMP BH,CL
         JNE CHECK_FULL
         CMP CL,CH
-        JNE CHECK_FULL
+        JNE CHECK_FULL 
+        
+        ; CHECK IF THERE'S ANY HYPHEN
+        CMP BH,'-'
+        JE CHECK_FULL
         
         MOV AH,9    
         LEA DX,WIN_P2
@@ -295,6 +336,8 @@ FILLED DB 0     ;how many positions filled
        CMP BH,9
        JE GAME_OVER
      
+     POP CX  
+     LOOP BIG_LOOP;
      
      ;GAME STARTS HERE
                   
