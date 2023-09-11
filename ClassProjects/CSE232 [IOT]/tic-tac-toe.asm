@@ -11,7 +11,9 @@ B2 DB ?
 B3 DB ?
 C1 DB ?
 C2 DB ?
-C3 DB ?   
+C3 DB ?
+
+   
 
 ;printing 
 SPACES DB '          $'
@@ -196,7 +198,37 @@ FILLED DB 0     ;how many positions filled
      
      
      ;
-     ;Check win conditions here.
+     ;Check win conditions here. 
+     MOV CX,8
+     PUSH CX
+     
+     BIG_LOOP:
+     
+     CMP CX,1
+     JE ROW_1
+     
+     CMP CX,2
+     JE ROW_2
+     
+     CMP CX,3
+     JE ROW_3
+     
+     CMP CX,4
+     JE COL_1
+     
+     CMP CX,5
+     JE COL_2
+     
+     CMP CX,6
+     JE COL_3
+     
+     CMP CX,7
+     JE DIAG_1
+     
+     CMP CX,8
+     JE DIAG_2
+     
+     
      ROW_1:
      MOV BH,A1;
      MOV CL,A2;
@@ -295,6 +327,8 @@ FILLED DB 0     ;how many positions filled
        CMP BH,9
        JE GAME_OVER
      
+     POP CX  
+     LOOP BIG_LOOP;
      
      ;GAME STARTS HERE
                   
