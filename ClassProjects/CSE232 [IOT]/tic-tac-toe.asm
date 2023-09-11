@@ -66,7 +66,11 @@ FILLED DB 0     ;how many positions filled
      MOV B3,'-'
      MOV C1,'-'
      MOV C2,'-'
-     MOV C3,'-'     
+     MOV C3,'-' 
+     
+     ;NOTE:
+     ;BL FOR alternating X,0
+     ;BH,CH,CL FOR WIN CONDITION  
      
      MOV BL,'x'
      
@@ -190,19 +194,111 @@ FILLED DB 0     ;how many positions filled
      INT 21H          
      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
      
-     ;CHECK IF FILLED
-     CMP FILLED,9   
-     ;
+     
      ;
      ;Check win conditions here.
+     ROW_1:
+     MOV BH,A1;
+     MOV CL,A2;
+     MOV CH,A3;
+     JMP WIN
+     
+     ROW_2:
+     MOV BH,B1;
+     MOV CL,B2;
+     MOV CH,B3;
+     JMP WIN
+     
+     ROW_3:
+     MOV BH,C1;
+     MOV CL,C2;
+     MOV CH,C3;
+     JMP WIN
+     
+     COL_1:
+     MOV BH,A1;
+     MOV CL,B1;
+     MOV CH,C1;
+     JMP WIN
+     
+     
+     COL_2:
+     MOV BH,A2;
+     MOV CL,B2;
+     MOV CH,C2;
+     JMP WIN
+     
+     COL_3:
+     MOV BH,A3;
+     MOV CL,B3;
+     MOV CH,C3;
+     JMP WIN
+     
+     DIAG_1:
+     MOV BH,A1;
+     MOV CL,B2;
+     MOV CH,C3;
+     JMP WIN
+     
+     DIAG_2:
+     MOV BH,A3;
+     MOV CL,B2;
+     MOV CH,C1;
+     JMP WIN
+     
+     
+     
+     WIN: 
+     ; CHECK IF THERE'S ANY HYPHEN
+     CMP BH,'-'
+     JE START_GAME
+     CMP CL,'-'
+     JE START_GAME
+     CMP CH,'-'
+     JE START_GAME
+     
+     ;ITS PLAYER 1 TURN IF BL=X; CHECK IF PLAYER 2 WON
+     CMP BL,'x'
+     JE PLAYER2_WON
+     
+     PLAYER1_WON:
+     
+        CMP BH,CL
+        JNE CHECK_FULL
+        CMP CL,CH
+        JNE CHECK_FULL
+        
+        MOV AH,9    
+        LEA DX,WIN_P1
+        INT 21H
+        JMP GAME_OVER
+        
+     JMP CHECK_FULL
+     
+     PLAYER2_WON:  
+     
+        CMP BH,CL
+        JNE CHECK_FULL
+        CMP CL,CH
+        JNE CHECK_FULL
+        
+        MOV AH,9    
+        LEA DX,WIN_P2
+        INT 21H
+        JMP GAME_OVER    
      ;
+     
      ;
-     JGE GAME_OVER
+     CHECK_FULL:
+     ;CHECK IF ITS FULL
+       MOV BH,FILLED
+       CMP BH,9
+       JE GAME_OVER
      
      
      ;GAME STARTS HERE
                   
-     Start_game:            
+     START_GAME:            
      LEA DX, NEWLINES
      MOV AH,9
      INT 21H  
@@ -328,8 +424,6 @@ FILLED DB 0     ;how many positions filled
      GAME_OVER:
      MOV AH,9
      LEA DX,NEWLINES
-     INT 21H
-     LEA DX,GAME_OVER_MSG
      INT 21H 
      LEA DX,NEWLINE
      INT 21H
